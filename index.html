@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Input Nilai Siswa SMPN 13</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{width:100%;overflow-x:hidden}
+    body{font-family:Arial,sans-serif;background:#f0f2f5;min-height:100vh;padding:12px;width:100%;max-width:100%;overflow-x:hidden}
+    .login-container{width:100%;max-width:420px;margin:30px auto;background:white;padding:28px 20px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,0.12);text-align:center}
+    .login-container h3{color:#1b5e20;margin-bottom:2px;font-size:1.2rem}
+    .login-container .sub{font-size:0.8rem;color:#666;margin-bottom:20px}
+    .logo-sekolah{width:85px;height:85px;object-fit:contain;margin:0 auto 12px;display:block}
+    .btn-login{width:100%;padding:14px;background:linear-gradient(135deg,#1b5e20,#388e3c);color:white;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:10px}
+    .card-wide{display:none;background:white;width:100%;margin:0 auto 16px;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12)}
+    .header{background:linear-gradient(135deg,#1b5e20,#2e7d32,#388e3c);color:white;padding:20px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .header-logo-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px}
+    .header-logo-wrap .logo-mini{width:60px;height:60px;object-fit:contain}
+    .header-text-wrap{text-align:center}
+    .header h2{font-size:1.1rem;letter-spacing:1px;margin-bottom:3px}
+    .header .sub{font-size:0.78rem;opacity:0.85}
+    .btn-logout{position:absolute;top:12px;right:12px;padding:6px 10px;background:rgba(255,255,255,0.2);color:white;border:1px solid white;border-radius:6px;font-size:0.72rem;cursor:pointer;font-weight:600}
+    .body{padding:16px}
+    .field{margin-bottom:11px}
+    .field label{display:block;font-size:0.7rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+    select,input[type=text],input[type=password],input[type=number]{width:100%;padding:10px 11px;border:1.5px solid #ddd;border-radius:8px;font-size:0.9rem;background:#fafafa;color:#333;-webkit-appearance:none;appearance:none}
+    select:focus,input:focus{outline:none;border-color:#2e7d32;background:#fff;box-shadow:0 0 0 3px rgba(46,125,50,0.12)}
+    select:disabled{background:#eee;color:#777;cursor:not-allowed}
+    input:disabled{background:#eee;color:#777;cursor:not-allowed}
+    .guru-card{background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:none}
+    .guru-title{font-size:0.7rem;font-weight:700;color:#1b5e20;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+    .guru-card .guru-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:0.83rem;padding:5px 0;border-bottom:1px dashed #c8e6c9}
+    .guru-card .guru-row:last-of-type{border:none}
+    .guru-card .guru-row .lbl{color:#555;min-width:110px;flex-shrink:0}
+    .guru-card .guru-row .val{font-weight:700;color:#1b5e20;text-align:right;word-break:break-all}
+    .btn-edit-guru{width:100%;padding:8px;background:white;color:#2e7d32;border:1.5px solid #2e7d32;border-radius:8px;font-size:0.8rem;font-weight:700;cursor:pointer;margin-top:10px;display:none}
+    .btn-admin-tgl{width:100%;padding:8px;background:#fff3cd;color:#e65100;border:1.5px solid #e65100;border-radius:8px;font-size:0.8rem;font-weight:700;cursor:pointer;margin-top:6px;display:none}
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;align-items:center;justify-content:center;padding:16px}
+    .modal-bg.show{display:flex}
+    .modal{background:white;border-radius:14px;width:100%;max-width:480px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+    .modal-head{background:linear-gradient(135deg,#1b5e20,#388e3c);color:white;padding:14px 18px;font-size:0.9rem;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+    .modal-close{background:rgba(255,255,255,0.25);border:none;color:white;width:28px;height:28px;border-radius:50%;font-size:1rem;cursor:pointer}
+    .modal-body{padding:18px}
+    .modal-foot{padding:12px 18px;border-top:1px solid #eee;display:flex;gap:8px}
+    .btn-cancel{flex:1;padding:10px;background:#f5f5f5;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;color:#555}
+    .btn-save-guru{flex:2;padding:10px;background:linear-gradient(135deg,#1b5e20,#388e3c);color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:700;cursor:pointer}
+    .preview-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;flex-direction:column}
+    .preview-bg.show{display:flex}
+    .preview-head{background:#1b5e20;color:white;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+    .preview-head h3{font-size:0.95rem;font-weight:700}
+    .preview-head .preview-sub{font-size:0.72rem;opacity:0.85}
+    .btn-preview-close{padding:7px 16px;background:#b71c1c;color:white;border:none;border-radius:6px;font-size:0.85rem;font-weight:700;cursor:pointer}
+    .preview-body{flex:1;overflow-y:auto;background:white;padding:16px}
+    .preview-info{background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:0.82rem;line-height:1.7}
+    .preview-info b{color:#1b5e20}
+    .preview-tbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid #ddd}
+    .preview-tbl{border-collapse:collapse;min-width:100%;font-size:0.72rem}
+    .preview-tbl thead tr{background:#1b5e20;color:white}
+    .preview-tbl thead th{padding:7px 5px;text-align:center;white-space:nowrap;font-size:0.65rem}
+    .preview-tbl tbody tr.lulus{background:#e8f5e9}
+    .preview-tbl tbody tr.remed{background:#ffebee}
+    .preview-tbl tbody td{padding:5px 3px;text-align:center;border-bottom:1px solid #eee;font-size:0.72rem}
+    .preview-tbl tbody td.p-nama{text-align:left;padding-left:8px;min-width:130px;font-weight:600}
+    .preview-tbl tbody td.p-no{min-width:28px;color:#888}
+    .preview-tbl tbody td.p-hasil{background:inherit;color:#555}
+    .preview-tbl tbody td.p-rapor{font-weight:800;font-size:0.82rem}
+    .tbl-wrap{overflow-x:auto;margin-bottom:16px;border-radius:10px;border:1.5px solid #ddd;width:100%;-webkit-overflow-scrolling:touch}
+    table{border-collapse:collapse;min-width:100%;font-size:0.78rem}
+    thead tr{background:#1b5e20;color:white}
+    thead th{padding:8px 6px;text-align:center;white-space:nowrap;font-size:0.7rem}
+    tbody tr:nth-child(even){background:#f9f9f9}
+    tbody tr:hover{background:#e8f5e9}
+    tbody td{padding:4px 3px;text-align:center;border-bottom:1px solid #eee}
+    tbody td.nama-col{text-align:left;padding-left:8px;min-width:160px;font-weight:600}
+    tbody td.no-col{min-width:30px;color:#888}
+    tbody td.hasil-col{background:#fff8e1;color:#555;font-size:0.72rem}
+    tbody td input{width:46px;padding:4px;text-align:center;border:1px solid #ddd;border-radius:4px;font-size:0.78rem;background:white}
+    tbody td input:focus{border-color:#2e7d32;outline:none;background:#f1f8f3}
+    .tbl-info{font-size:0.75rem;color:#888;margin-bottom:12px;padding:8px 12px;background:#fff3cd;border-radius:6px;border:1px solid #ffe082}
+    .btn-group-row{display:flex;gap:10px;margin-bottom:8px}
+    .btn-save{flex:3;padding:13px;background:linear-gradient(135deg,#1b5e20,#388e3c);color:white;border:none;border-radius:10px;font-size:0.95rem;font-weight:700;letter-spacing:1px;cursor:pointer}
+    .btn-save:disabled{opacity:0.6;cursor:not-allowed}
+    .btn-clear{flex:1;padding:13px;background:linear-gradient(135deg,#d32f2f,#c62828);color:white;border:none;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer}
+    .btn-group-download{display:flex;gap:8px;margin-bottom:4px}
+    .btn-preview{flex:1;padding:13px;background:linear-gradient(135deg,#e65100,#f57c00);color:white;border:none;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer}
+    .btn-download{flex:2;padding:13px;background:linear-gradient(135deg,#0d47a1,#1565c0);color:white;border:none;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer}
+    .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#1b5e20;color:white;padding:10px 22px;border-radius:50px;font-size:0.84rem;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:transform .3s ease;z-index:9999;white-space:nowrap}
+    .toast.show{transform:translateX(-50%) translateY(0)}
+    .toast.error{background:#b71c1c}
+    .overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.75);z-index:998;align-items:center;justify-content:center;flex-direction:column;gap:10px}
+    .overlay.show{display:flex}
+    .spinner{width:36px;height:36px;border:4px solid #ddd;border-top-color:#2e7d32;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .ov-txt{font-size:0.8rem;font-weight:600;color:#555}
+    @media(max-width:480px){
+      body{padding:6px}
+      .login-container{margin:10px auto;padding:20px 14px;max-width:100%;border-radius:10px}
+      .logo-sekolah{width:70px;height:70px}
+      .card-wide{border-radius:10px;margin-bottom:6px}
+      .header{padding:14px 12px}
+      .header h2{font-size:0.92rem}
+      .header .sub{font-size:0.7rem}
+      .header-logo-wrap .logo-mini{width:48px;height:48px}
+      .btn-logout{top:10px;right:10px;padding:5px 8px;font-size:0.68rem}
+      .body{padding:10px}
+      select,input[type=text],input[type=password],input[type=number]{padding:10px;font-size:0.9rem}
+      .btn-login{padding:13px;font-size:0.95rem}
+      .btn-group-row{flex-direction:column;gap:6px}
+      .btn-save,.btn-clear{padding:13px;font-size:0.9rem;width:100%}
+      .btn-group-download{flex-direction:column;gap:6px}
+      .btn-preview,.btn-download{padding:13px;font-size:0.9rem;width:100%}
+      tbody td input{width:38px;font-size:0.7rem;padding:3px}
+      thead th{font-size:0.65rem;padding:6px 4px}
+      .tbl-info{font-size:0.7rem}
+      .btn-edit-guru{font-size:0.78rem;padding:8px}
+      .guru-card .guru-row{font-size:0.78rem}
+      .guru-card .guru-row .lbl{min-width:90px}
+      .preview-tbl{font-size:0.65rem}
+      .preview-tbl thead th{font-size:0.6rem;padding:5px 3px}
+      .preview-tbl tbody td{font-size:0.65rem;padding:4px 2px}
+      .preview-tbl tbody td.p-nama{min-width:100px}
+    }
+  </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay">
+  <div class="spinner"></div>
+  <div class="ov-txt" id="ov-txt">Memuat...</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN -->
+<div class="login-container" id="loginBox">
+  <img class="logo-sekolah" src="https://i.ibb.co.com/Zz9dbRD/logosmp13.png" alt="Logo SMPN 13">
+  <h3>🔒 LOGIN GURU</h3>
+  <div class="sub">SMP Negeri 13 Bandar Lampung</div>
+  <div class="field" style="text-align:left;margin-top:16px">
+    <label>Password (NIP/NUPTK)</label>
+    <div style="position:relative">
+      <input type="password" id="password" placeholder="Masukkan NIP/NUPTK"
+        onkeydown="if(event.key==='Enter') loginAplikasi()"
+        style="padding-right:42px">
+      <button type="button" onclick="togglePassword()"
+        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:#888;padding:0;line-height:1"
+        id="btnTogglePass">👁️</button>
+    </div>
+  </div>
+  <div class="field" style="text-align:left">
+    <label>🗓️ Semester</label>
+    <select id="semester">
+      <option value="">— Pilih Semester —</option>
+      <option value="Ganjil 2026/2027">📘 Ganjil 2026/2027</option>
+      <option value="Genap 2026/2027">📗 Genap 2026/2027</option>
+    </select>
+  </div>
+  <button class="btn-login" onclick="loginAplikasi()">🔓 Masuk Aplikasi</button>
+</div>
+
+<!-- MODAL EDIT GURU -->
+<div class="modal-bg" id="modalGuru">
+  <div class="modal">
+    <div class="modal-head">✏️ Edit Data Guru (Admin)<button class="modal-close" onclick="tutupModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Nama Guru</label><input type="text" id="m_namaGuru"></div>
+      <div class="field"><label>NIP</label><input type="text" id="m_nip"></div>
+      <div class="field"><label>Tanggal Pengumpulan</label><input type="text" id="m_tgl" placeholder="Contoh: 08 Juni 2026"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="tutupModal()">Batal</button>
+      <button class="btn-save-guru" onclick="simpanGuru()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADMIN SET TANGGAL -->
+<div class="modal-bg" id="modalAdminTgl">
+  <div class="modal">
+    <div class="modal-head">⚙️ Set Tanggal Semua Kelas<button class="modal-close" onclick="tutupModalAdminTgl()">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:0.8rem;color:#666;margin-bottom:14px">Tanggal ini akan berlaku untuk <b>SEMUA mapel dan kelas</b> pada semester yang aktif.</p>
+      <div class="field"><label>Tanggal Pengumpulan</label><input type="text" id="admin_tgl" placeholder="Contoh: 08 Juni 2026"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="tutupModalAdminTgl()">Batal</button>
+      <button class="btn-save-guru" onclick="simpanTanggalAdmin()">💾 Terapkan ke Semua</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PREVIEW -->
+<div class="preview-bg" id="previewBg">
+  <div class="preview-head">
+    <div>
+      <h3 id="previewJudul">Preview Nilai</h3>
+      <div class="preview-sub" id="previewSub"></div>
+    </div>
+    <button class="btn-preview-close" onclick="tutupPreview()">✖ Keluar</button>
+  </div>
+  <div class="preview-body">
+    <div class="preview-info" id="previewInfo"></div>
+    <div class="preview-tbl-wrap">
+      <table class="preview-tbl">
+        <thead id="previewHead"></thead>
+        <tbody id="previewBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="card-wide" id="mainApp">
+  <div class="header">
+    <div class="header-logo-wrap">
+      <img class="logo-mini" src="https://i.ibb.co.com/Zz9dbRD/logosmp13.png" alt="Logo">
+      <div class="header-text-wrap">
+        <h2>📊 INPUT NILAI SISWA</h2>
+        <div class="sub">SMP Negeri 13 Bandar Lampung</div>
+        <div class="sub" id="headerSmt" style="margin-top:3px;font-weight:700;font-size:0.8rem;opacity:1"></div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="logoutAplikasi()">🚪 Keluar</button>
+  </div>
+  <div class="body">
+    <div class="field">
+      <label>Mata Pelajaran</label>
+      <select id="mapel" onchange="onMapelChange()" disabled>
+        <option value="">— Pilih Mata Pelajaran —</option>
+      </select>
+    </div>
+    <div class="guru-card" id="guruCard">
+      <div class="guru-title">👨‍🏫 Data Guru</div>
+      <div class="guru-row"><span class="lbl">Nama Guru</span><span class="val" id="g_nama">-</span></div>
+      <div class="guru-row"><span class="lbl">NIP</span><span class="val" id="g_nip">-</span></div>
+      <div class="guru-row"><span class="lbl">Tgl. Pengumpulan</span><span class="val" id="g_tgl">-</span></div>
+      <button class="btn-edit-guru" id="btnEditGuru" onclick="bukaModal()">✏️ Edit Data Guru (Admin)</button>
+      <button class="btn-admin-tgl" id="btnAdminTgl" onclick="bukaModalAdminTgl()">⚙️ Set Tanggal Semua Kelas (Admin)</button>
+    </div>
+    <div class="field">
+      <label>Kelas</label>
+      <select id="kelas" onchange="onKelasChange()" disabled>
+        <option value="">— Pilih Kelas —</option>
+      </select>
+    </div>
+    <div class="tbl-info" id="tblInfo" style="display:none">
+      📋 <b>Copy-Paste dari Excel:</b> Blok 1 kolom di Excel → Ctrl+C → klik sel pertama di tabel → Ctrl+V
+    </div>
+    <div class="tbl-wrap" id="tblWrap" style="display:none">
+      <table id="tblNilai">
+        <thead>
+          <tr>
+            <th>No</th><th>Nama Siswa</th>
+            <th>TH1</th><th>TH2</th><th>TH3</th><th>TH4</th><th>TH5</th>
+            <th style="background:#e65100">Rata TH</th>
+            <th>PH1</th><th>PH2</th>
+            <th style="background:#e65100">Rata PH</th>
+            <th style="background:#e65100">HPH</th>
+            <th id="thSts">STS</th><th id="thPat">SAS</th>
+            <th style="background:#b71c1c">RAPOR</th>
+            <th style="background:#388e3c">KET</th>
+          </tr>
+        </thead>
+        <tbody id="tblBody"></tbody>
+      </table>
+    </div>
+    <div class="btn-group-row" id="btnGroupRow" style="display:none">
+      <button class="btn-save" id="btnSaveAll" onclick="simpanSemua()">💾 SIMPAN SEMUA NILAI</button>
+      <button class="btn-clear" onclick="kosongkanTabel()">🗑️ KOSONGKAN</button>
+    </div>
+    <div class="btn-group-download" id="btnGroupDownload" style="display:none">
+      <button class="btn-preview" onclick="previewKelas()">👁️ PREVIEW</button>
+      <button class="btn-download" onclick="downloadKelas()">📄 DOWNLOAD PDF</button>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:12px 0 20px;font-size:0.78rem;color:#888;">@Mrsent2026</div>
+
+<script>
+  var API = 'https://script.google.com/macros/s/AKfycbw_jpr7wQg0m6aWXi-IjR7Ho1PX8e3A08GHeSjGKCBhne8af0tTFUwe0cn-tevXBQQv8Q/exec';
+  var _sessionGuru = null;
+  var _semester    = '';
+
+  window.onload = function() {
+    document.addEventListener('paste', handleVerticalPaste);
+  };
+
+  // ── API HELPERS ──────────────────────────────────────────
+  function apiGet(params) {
+    var url = API + '?' + Object.keys(params).map(function(k) {
+      return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+    }).join('&');
+    return fetch(url).then(function(r) { return r.json(); });
+  }
+
+  function apiPost(data) {
+    return fetch(API, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }).then(function(r) { return r.json(); });
+  }
+
+  function getSemesterKeyClient(semester) {
+    if (!semester) return 'Ganjil';
+    return semester.toLowerCase().indexOf('genap') >= 0 ? 'Genap' : 'Ganjil';
+  }
+
+  function getLabelOP(kelas, semester) {
+    var isKelas9 = kelas.indexOf('9.') === 0;
+    var smtKey   = getSemesterKeyClient(semester);
+    if (smtKey === 'Ganjil') return { labelO:'STS', labelP:'SAS' };
+    if (isKelas9)            return { labelO:'LUS', labelP:'US' };
+    return { labelO:'STS', labelP:'SAT' };
+  }
+
+  function updateLabelHeader(kelas) {
+    var lbl = getLabelOP(kelas, _semester);
+    document.getElementById('thSts').textContent = lbl.labelO;
+    document.getElementById('thPat').textContent = lbl.labelP;
+  }
+
+  function togglePassword() {
+    var input = document.getElementById('password');
+    var btn   = document.getElementById('btnTogglePass');
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.textContent = '🔒';
+    } else {
+      input.type = 'password';
+      btn.textContent = '👁️';
+    }
+  }
+
+  // ── LOGIN ────────────────────────────────────────────────
+  function loginAplikasi() {
+    var p   = document.getElementById('password').value.trim();
+    var smt = document.getElementById('semester').value;
+    if (!p)   { toast('Password wajib diisi!', true); return; }
+    if (!smt) { toast('Pilih semester terlebih dahulu!', true); return; }
+    _semester = smt;
+    showOv('Memverifikasi akun...');
+    apiGet({ action:'login', password:p })
+      .then(function(res) {
+        hideOv();
+        if (res.success) {
+          _sessionGuru          = res;
+          window._allMapelKelas = res.allMapelKelas;
+          window._isAdmin       = res.isAdmin;
+
+          var mSelect = document.getElementById('mapel');
+          mSelect.innerHTML = '';
+          res.allowedMapels.forEach(function(mp) {
+            var opt = document.createElement('option');
+            opt.value = mp; opt.text = mp;
+            mSelect.appendChild(opt);
+          });
+          mSelect.value    = res.mapel;
+          mSelect.disabled = res.allowedMapels.length <= 1;
+
+          showOv('Memuat daftar kelas...');
+          var params = {
+            action: 'getKelas',
+            mapel: res.mapel,
+            isAdmin: res.isAdmin ? 'true' : 'false',
+            semester: _semester
+          };
+          if (res.allMapelKelas) params.allMapelKelas = JSON.stringify(res.allMapelKelas);
+          apiGet(params).then(function(listKelas) {
+            hideOv();
+            var kSelect = document.getElementById('kelas');
+            var kHtml   = '<option value="">— Pilih Kelas —</option>';
+            listKelas.forEach(function(k) {
+              kHtml += '<option value="' + k + '">' + k + '</option>';
+            });
+            kSelect.innerHTML = kHtml;
+            kSelect.disabled  = false;
+          });
+
+          document.getElementById('g_nama').textContent    = res.namaGuru || '-';
+          document.getElementById('headerSmt').textContent = '📅 ' + _semester;
+          document.getElementById('btnEditGuru').style.display  = res.isAdmin ? 'block' : 'none';
+          document.getElementById('btnAdminTgl').style.display  = res.isAdmin ? 'block' : 'none';
+          document.getElementById('loginBox').style.display = 'none';
+          document.getElementById('mainApp').style.display  = 'block';
+          document.getElementById('guruCard').style.display = 'block';
+
+          apiGet({ action:'updateMapel', mapel:res.mapel }).catch(function(){});
+          toast('👋 Selamat datang, ' + res.namaGuru + '!');
+        } else {
+          toast('❌ ' + res.msg, true);
+        }
+      })
+      .catch(function(e) { hideOv(); toast('Error: ' + e.message, true); });
+  }
+
+  function logoutAplikasi() {
+    _sessionGuru = null; _semester = '';
+    window._allMapelKelas = null; window._isAdmin = false;
+    document.getElementById('password').value         = '';
+    document.getElementById('semester').value         = '';
+    document.getElementById('headerSmt').textContent  = '';
+    document.getElementById('btnEditGuru').style.display  = 'none';
+    document.getElementById('btnAdminTgl').style.display  = 'none';
+    resetTampilan();
+    document.getElementById('mapel').disabled = true;
+    document.getElementById('kelas').disabled = true;
+    document.getElementById('guruCard').style.display = 'none';
+    document.getElementById('mainApp').style.display  = 'none';
+    document.getElementById('loginBox').style.display = 'block';
+    toast('🚪 Berhasil keluar dari aplikasi');
+  }
+
+  // ── MAPEL & KELAS ────────────────────────────────────────
+  function onMapelChange() {
+    var mapel = document.getElementById('mapel').value;
+    resetTampilan();
+    var kSelect = document.getElementById('kelas');
+    kSelect.innerHTML = '<option value="">— Pilih Kelas —</option>';
+    kSelect.disabled  = true;
+    if (!mapel) return;
+    showOv('Memuat daftar kelas...');
+    var params = {
+      action: 'getKelas',
+      mapel: mapel,
+      isAdmin: window._isAdmin ? 'true' : 'false',
+      semester: _semester
+    };
+    if (window._allMapelKelas) params.allMapelKelas = JSON.stringify(window._allMapelKelas);
+    apiGet(params)
+      .then(function(listKelas) {
+        hideOv();
+        var kHtml = '<option value="">— Pilih Kelas —</option>';
+        listKelas.forEach(function(k) {
+          kHtml += '<option value="' + k + '">' + k + '</option>';
+        });
+        kSelect.innerHTML = kHtml;
+        kSelect.disabled  = false;
+        apiGet({ action:'updateMapel', mapel:mapel }).catch(function(){});
+      })
+      .catch(function(e) { hideOv(); toast('Error: ' + e.message, true); });
+  }
+
+  function onKelasChange() {
+    var kelas = document.getElementById('kelas').value;
+    var mapel = document.getElementById('mapel').value;
+    resetTampilan();
+    if (!kelas) return;
+    updateLabelHeader(kelas);
+    apiGet({ action:'getDataGuru', mapel:mapel, kelas:kelas, semester:_semester })
+      .then(function(g) {
+        if (!g) return;
+        document.getElementById('g_nama').textContent = g.namaGuru || '-';
+        document.getElementById('g_nip').textContent  = g.nip  || '-';
+        document.getElementById('g_tgl').textContent  = g.tgl  || '-';
+        window._guru = g;
+      }).catch(function(){});
+    apiGet({ action:'syncGuru', mapel:mapel, kelas:kelas, semester:_semester }).catch(function(){});
+    loadTabel(mapel, kelas);
+  }
+
+  // ── TABEL ────────────────────────────────────────────────
+  function loadTabel(mapel, kelas) {
+    showOv('Memuat data tabel...');
+    apiGet({ action:'getDataKelas', mapel:mapel, kelas:kelas, semester:_semester })
+      .then(function(list) {
+        hideOv();
+        if (!list || list.length === 0) { toast('Tidak ada data siswa', true); return; }
+        var html = '';
+        for (var i = 0; i < list.length; i++) {
+          var d = list[i];
+          html += '<tr>' +
+            '<td class="no-col">' + d.no + '</td>' +
+            '<td class="nama-col">' + d.nama + '</td>' +
+            '<td><input type="number" min="0" max="100" value="' + (d.th1||'') + '" data-nama="' + d.nama + '" data-col="th1"></td>' +
+            '<td><input type="number" min="0" max="100" value="' + (d.th2||'') + '" data-nama="' + d.nama + '" data-col="th2"></td>' +
+            '<td><input type="number" min="0" max="100" value="' + (d.th3||'') + '" data-nama="' + d.nama + '" data-col="th3"></td>' +
+            '<td><input type="number" min="0" max="100" value="' + (d.th4||'') + '" data-nama="' + d.nama + '" data-col="th4"></td>' +
+            '<td><input type="number" min="0" max="100" value="' + (d.th5||'') + '" data-nama="' + d.nama + '" data-col="th5"></td>' +
+            '<td class="hasil-col">' + (d.rataTH||'-') + '</td>' +
+            '<td><input type="number" min="0" max="100" value="' + (d.ph1||'') + '" data-nama="' + d.nama + '" data-col="ph1"></td>' +
+            '<td><input type="number" min="0" max="100" value="' + (d.ph2||'') + '" data-nama="' + d.nama + '" data-col="ph2"></td>' +
+            '<td class="hasil-col">' + (d.rataPH||'-') + '</td>' +
+            '<td class="hasil-col">' + (d.hph||'-') + '</td>' +
+            '<td><input type="number" min="0" max="100" value="' + (d.sts||'') + '" data-nama="' + d.nama + '" data-col="sts"></td>' +
+            '<td><input type="number" min="0" max="100" value="' + (d.pat||'') + '" data-nama="' + d.nama + '" data-col="pat"></td>' +
+            '<td class="hasil-col" style="font-weight:800;color:' + (Number(d.rapor)>=75?'#1b5e20':'#b71c1c') + '">' + (d.rapor ? Math.round(Number(d.rapor)) : '-') + '</td>' +
+            '<td class="hasil-col" style="font-style:italic">' + (d.ket||'-') + '</td>' +
+            '</tr>';
+        }
+        document.getElementById('tblBody').innerHTML          = html;
+        document.getElementById('tblWrap').style.display      = 'block';
+        document.getElementById('tblInfo').style.display      = 'block';
+        document.getElementById('btnGroupRow').style.display  = 'flex';
+        document.getElementById('btnGroupDownload').style.display = 'flex';
+      })
+      .catch(function(e) { toast('Gagal memuat tabel: ' + e.message, true); hideOv(); });
+  }
+
+  function simpanSemua() {
+    var mapel = document.getElementById('mapel').value;
+    var kelas = document.getElementById('kelas').value;
+    if (!mapel || !kelas) { toast('Pilih mapel dan kelas dulu!', true); return; }
+    var inputs  = document.querySelectorAll('#tblBody input');
+    var dataMap = {};
+    for (var i = 0; i < inputs.length; i++) {
+      var inp  = inputs[i];
+      var nama = inp.getAttribute('data-nama');
+      var col  = inp.getAttribute('data-col');
+      if (!dataMap[nama]) dataMap[nama] = { nama: nama };
+      dataMap[nama][col] = inp.value;
+    }
+    var dataList = [];
+    for (var key in dataMap) { dataList.push(dataMap[key]); }
+    document.getElementById('btnSaveAll').disabled = true;
+    showOv('Menyimpan semua nilai...');
+    apiPost({ action:'simpanDataKelas', mapel:mapel, kelas:kelas, dataList:dataList, semester:_semester })
+      .then(function(res) {
+        hideOv();
+        document.getElementById('btnSaveAll').disabled = false;
+        if (res.ok) {
+          toast('✅ ' + res.msg);
+          setTimeout(function() { loadTabel(mapel, kelas); }, 1000);
+        } else { toast('❌ ' + (res.msg||'Gagal menyimpan'), true); }
+      })
+      .catch(function(e) {
+        hideOv();
+        document.getElementById('btnSaveAll').disabled = false;
+        toast('❌ Error: ' + e.message, true);
+      });
+  }
+
+  function kosongkanTabel() {
+    if (!confirm('Kosongkan semua input di tabel?')) return;
+    var inputs = document.querySelectorAll('#tblBody input');
+    for (var i = 0; i < inputs.length; i++) inputs[i].value = '';
+    toast('🗑️ Input tabel dikosongkan!');
+  }
+
+  // ── PREVIEW ──────────────────────────────────────────────
+  function previewKelas() {
+    var mapel = document.getElementById('mapel').value;
+    var kelas = document.getElementById('kelas').value;
+    if (!mapel || !kelas) { toast('Pilih mapel dan kelas dulu!', true); return; }
+    showOv('Memuat preview...');
+    apiGet({ action:'getDataKelas', mapel:mapel, kelas:kelas, semester:_semester })
+      .then(function(list) {
+        hideOv();
+        if (!list || list.length === 0) { toast('Tidak ada data siswa', true); return; }
+        var lbl    = getLabelOP(kelas, _semester);
+        var stsLbl = lbl.labelO;
+        var patLbl = lbl.labelP;
+        var g      = window._guru || {};
+        document.getElementById('previewJudul').textContent = '👁️ Preview Nilai — ' + kelas;
+        document.getElementById('previewSub').textContent   = mapel + ' | ' + _semester;
+        document.getElementById('previewInfo').innerHTML    =
+          '<b>Mata Pelajaran:</b> ' + mapel + '<br>' +
+          '<b>Kelas:</b> ' + kelas + ' &nbsp;|&nbsp; <b>Semester:</b> ' + _semester + '<br>' +
+          '<b>Guru:</b> ' + (g.namaGuru||'-') + ' &nbsp;|&nbsp; <b>NIP:</b> ' + (g.nip||'-') + ' &nbsp;|&nbsp; <b>Tgl:</b> ' + (g.tgl||'-');
+        document.getElementById('previewHead').innerHTML =
+          '<tr><th>No</th><th>Nama Siswa</th><th>TH1</th><th>TH2</th><th>TH3</th><th>TH4</th><th>TH5</th>' +
+          '<th>Rata TH</th><th>PH1</th><th>PH2</th><th>Rata PH</th><th>HPH</th>' +
+          '<th>' + stsLbl + '</th><th>' + patLbl + '</th><th>RAPOR</th><th>KET</th></tr>';
+        var rows = '';
+        for (var i = 0; i < list.length; i++) {
+          var d = list[i];
+          var rapor = d.rapor ? Math.round(Number(d.rapor)) : '-';
+          var cls   = Number(rapor) >= 75 ? 'lulus' : 'remed';
+          rows += '<tr class="' + cls + '"><td class="p-no">' + d.no + '</td><td class="p-nama">' + d.nama + '</td>' +
+            '<td>' + (d.th1||'') + '</td><td>' + (d.th2||'') + '</td><td>' + (d.th3||'') + '</td>' +
+            '<td>' + (d.th4||'') + '</td><td>' + (d.th5||'') + '</td>' +
+            '<td class="p-hasil">' + (d.rataTH||'-') + '</td>' +
+            '<td>' + (d.ph1||'') + '</td><td>' + (d.ph2||'') + '</td>' +
+            '<td class="p-hasil">' + (d.rataPH||'-') + '</td><td class="p-hasil">' + (d.hph||'-') + '</td>' +
+            '<td>' + (d.sts||'') + '</td><td>' + (d.pat||'') + '</td>' +
+            '<td class="p-rapor" style="color:' + (Number(rapor)>=75?'#1b5e20':'#b71c1c') + '">' + rapor + '</td>' +
+            '<td class="p-hasil" style="font-style:italic">' + (d.ket||'-') + '</td></tr>';
+        }
+        document.getElementById('previewBody').innerHTML = rows;
+        document.getElementById('previewBg').classList.add('show');
+      })
+      .catch(function(e) { hideOv(); toast('❌ Error: ' + e.message, true); });
+  }
+
+  function tutupPreview() {
+    document.getElementById('previewBg').classList.remove('show');
+  }
+
+  // ── DOWNLOAD ─────────────────────────────────────────────
+  function downloadKelas() {
+    var mapel = document.getElementById('mapel').value;
+    var kelas = document.getElementById('kelas').value;
+    if (!mapel || !kelas) { toast('Pilih mapel dan kelas dulu!', true); return; }
+    showOv('Menyiapkan file download...');
+    apiGet({ action:'getDownloadUrl', mapel:mapel, kelas:kelas, semester:_semester })
+      .then(function(res) {
+        hideOv();
+        if (!res.url) { toast('Gagal membuat link download', true); return; }
+        toast('✅ File sedang didownload...');
+        var a = document.createElement('a');
+        a.href = res.url;
+        a.download = 'Nilai_' + mapel + '_' + kelas + '.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      })
+      .catch(function(e) { hideOv(); toast('❌ Error: ' + e.message, true); });
+  }
+
+  // ── EDIT GURU ────────────────────────────────────────────
+  function bukaModal() {
+    var g = window._guru || {};
+    document.getElementById('m_namaGuru').value = g.namaGuru || '';
+    document.getElementById('m_nip').value      = g.nip  || '';
+    document.getElementById('m_tgl').value      = g.tgl  || '';
+    document.getElementById('modalGuru').classList.add('show');
+  }
+  function tutupModal() { document.getElementById('modalGuru').classList.remove('show'); }
+
+  function simpanGuru() {
+    var mapel    = document.getElementById('mapel').value;
+    var kelas    = document.getElementById('kelas').value;
+    var namaGuru = document.getElementById('m_namaGuru').value.trim();
+    var nip      = document.getElementById('m_nip').value.trim();
+    var tgl      = document.getElementById('m_tgl').value.trim();
+    if (!namaGuru || !nip) { toast('Nama guru dan NIP wajib diisi!', true); return; }
+    if (!kelas) { toast('Pilih kelas terlebih dahulu!', true); return; }
+    showOv('Menyimpan data guru...');
+    apiPost({ action:'simpanDataGuru', mapel:mapel, kelas:kelas, namaGuru:namaGuru, nip:nip, tgl:tgl, semester:_semester })
+      .then(function(res) {
+        hideOv(); tutupModal();
+        if (res.ok) {
+          toast('✅ ' + res.msg);
+          document.getElementById('g_nama').textContent = namaGuru;
+          document.getElementById('g_nip').textContent  = nip;
+          document.getElementById('g_tgl').textContent  = tgl;
+          window._guru = { namaGuru:namaGuru, nip:nip, tgl:tgl };
+        } else { toast('❌ Gagal menyimpan', true); }
+      })
+      .catch(function(e) { hideOv(); toast('❌ Error: ' + e.message, true); });
+  }
+
+  // ── ADMIN TANGGAL ────────────────────────────────────────
+  function bukaModalAdminTgl() {
+    document.getElementById('admin_tgl').value = '';
+    document.getElementById('modalAdminTgl').classList.add('show');
+  }
+  function tutupModalAdminTgl() { document.getElementById('modalAdminTgl').classList.remove('show'); }
+
+  function simpanTanggalAdmin() {
+    var tgl = document.getElementById('admin_tgl').value.trim();
+    if (!tgl) { toast('Tanggal wajib diisi!', true); return; }
+    if (!confirm('Yakin terapkan tanggal "' + tgl + '" ke SEMUA kelas dan mapel?')) return;
+    showOv('Menerapkan tanggal ke semua kelas...');
+    apiPost({ action:'setTanggal', tgl:tgl, semester:_semester })
+      .then(function(res) {
+        hideOv(); tutupModalAdminTgl();
+        if (res.ok) {
+          toast('✅ ' + res.msg);
+          document.getElementById('g_tgl').textContent = tgl;
+          if (window._guru) window._guru.tgl = tgl;
+        } else { toast('❌ Gagal menerapkan', true); }
+      })
+      .catch(function(e) { hideOv(); toast('❌ Error: ' + e.message, true); });
+  }
+
+  // ── PASTE VERTIKAL ───────────────────────────────────────
+  function handleVerticalPaste(e) {
+    var active = document.activeElement;
+    if (!active || active.tagName !== 'INPUT' || !active.hasAttribute('data-col')) return;
+    var col    = active.getAttribute('data-col');
+    var clip   = e.clipboardData || window.clipboardData;
+    var pasted = clip.getData('Text');
+    if (!pasted) return;
+    var rows = pasted.split(/\r\n|\r|\n/);
+    if (rows.length > 1 && rows[rows.length-1].trim() === '') rows.pop();
+    if (rows.length <= 1) return;
+    e.preventDefault();
+    var allInputs  = Array.from(document.querySelectorAll('#tblBody input[data-col="' + col + '"]'));
+    var startIndex = allInputs.indexOf(active);
+    if (startIndex === -1) return;
+    for (var i = 0; i < rows.length; i++) {
+      var target = allInputs[startIndex + i];
+      if (!target) break;
+      target.value = rows[i].trim().replace(',', '.');
+    }
+    toast('✅ ' + rows.length + ' data berhasil di-paste!');
+  }
+
+  // ── HELPERS ──────────────────────────────────────────────
+  function resetTampilan() {
+    document.getElementById('tblBody').innerHTML          = '';
+    document.getElementById('tblWrap').style.display      = 'none';
+    document.getElementById('tblInfo').style.display      = 'none';
+    document.getElementById('btnGroupRow').style.display  = 'none';
+    document.getElementById('btnGroupDownload').style.display = 'none';
+  }
+  function showOv(txt) {
+    document.getElementById('ov-txt').textContent = txt || 'Memuat...';
+    document.getElementById('overlay').classList.add('show');
+  }
+  function hideOv() { document.getElementById('overlay').classList.remove('show'); }
+  function toast(msg, isErr) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    if (isErr) t.classList.add('error'); else t.classList.remove('error');
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 3000);
+  }
+</script>
+</body>
+</html>
