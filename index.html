@@ -145,14 +145,18 @@
   .preview-tbl tbody td.p-nama{min-width:100px}
 }  
   /* KHUSUS HP HORIZONTAL/LANDSCAPE */
-@media(max-width:950px) and (orientation:landscape){
-  .body{padding:8px}
+@media(max-width:1024px){
   tbody td input{
-    width:40px !important;
-    height:32px !important;
-    font-size:0.85rem !important;
+    width:44px !important;
+    min-width:44px !important;
+    height:34px !important;
+    font-size:0.9rem !important;
     padding:4px 2px !important;
+    box-sizing:border-box !important;
   }
+  tbody td.nama-col{min-width:160px !important;font-size:0.85rem !important}
+  thead th{font-size:0.7rem !important;padding:6px 3px !important}
+}
   </style>
 </head>
 <body>
